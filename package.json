@@ -1,0 +1,19 @@
+{
+  "name": "mikemonkey",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An explorable 3D open world that an AI keeps rewriting while you play.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server": "node server/index.js"
+  },
+  "dependencies": {
+    "three": "0.160.1"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
