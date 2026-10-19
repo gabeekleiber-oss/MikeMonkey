@@ -10,6 +10,7 @@ export const DEFAULT_TUNE = Object.freeze({
   groundAccel: 60,
   groundDecel: 50,
   airAccel: 18,
+  maxSlope: 1.2, // grade (rise/run, 1 = 45 deg) above which you cannot walk uphill
 });
 
 export class Player {
@@ -42,7 +43,7 @@ export class Player {
   /**
    * Advance by dt seconds.
    * input: { forward, back, left, right, jump } booleans
-   * world: { height(x, z) } ground height function
+   * world: { height(x, z), slope?(x, z) } ground height (and optional grade) functions
    */
   step(dt, input, world) {
     const t = this.tune;
@@ -74,12 +75,19 @@ export class Player {
     }
 
     // --- horizontal move, one axis at a time so you slide along walls.
-    // A move is blocked if the ground ahead is more than stepUp above the feet.
+    // A move is blocked if the ground ahead is more than stepUp above the feet,
+    // or if it climbs onto ground steeper than maxSlope (only when the world
+    // provides slope(x, z); jumping over such ground is still possible).
+    const blocked = (x, z) => {
+      const gh = this.footprintHeight(world, x, z);
+      if (gh - pos.y > PLAYER.stepUp) return true;
+      return !!world.slope && gh > pos.y + 0.01 && world.slope(x, z) > t.maxSlope;
+    };
     const nxp = pos.x + vel.x * dt;
-    if (this.footprintHeight(world, nxp, pos.z) - pos.y <= PLAYER.stepUp) pos.x = nxp;
+    if (!blocked(nxp, pos.z)) pos.x = nxp;
     else vel.x = 0;
     const nzp = pos.z + vel.z * dt;
-    if (this.footprintHeight(world, pos.x, nzp) - pos.y <= PLAYER.stepUp) pos.z = nzp;
+    if (!blocked(pos.x, nzp)) pos.z = nzp;
     else vel.z = 0;
 
     // --- vertical
