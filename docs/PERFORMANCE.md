@@ -12,7 +12,7 @@ Measured continuously, not discovered at the end. Values live in
 
 ## Overlay
 
-Press **F3** in the game. It shows fps, frame time (mean and worst of the last
+Press the **backtick key (`)** in the game. It shows fps, frame time (mean and worst of the last
 120 frames), draw calls, triangles, and any metric systems report. A trailing
 `!` means a budget is exceeded.
 

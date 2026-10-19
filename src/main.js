@@ -59,7 +59,7 @@ Object.assign(overlay.style, {
 });
 overlay.innerHTML =
   '<div style="font-size:34px;font-weight:600">Click to enter</div>' +
-  '<div style="opacity:.8;font-size:15px">WASD move · Space jump · mouse look · Esc to release · F3 stats</div>';
+  '<div style="opacity:.8;font-size:15px">WASD move · Space jump · mouse look · Esc to release · ` stats</div>';
 document.body.appendChild(overlay);
 overlay.addEventListener('click', () => input.requestLock());
 input.onLockChange = (locked) => {

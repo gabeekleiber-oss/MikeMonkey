@@ -1,9 +1,12 @@
 import { BUDGETS } from './budgets.js';
 import { RollingStats } from './perf-stats.js';
 
-// Stats overlay. Toggle with F3. Other systems report through:
+// Stats overlay. Toggle with the backtick key (`). Other systems report through:
 //   perf.record('chunkBuildMs', ms)   timed work (rolling mean/max)
 //   perf.setCounter('creatures', n)   plain counters
+// Backtick, not a function key: many laptops use F-keys for brightness/volume.
+const TOGGLE_CODE = 'Backquote';
+
 export class Perf {
   constructor(renderer) {
     this.renderer = renderer;
@@ -23,7 +26,7 @@ export class Perf {
     });
     document.body.appendChild(this.el);
     window.addEventListener('keydown', (e) => {
-      if (e.code === 'F3') {
+      if (e.code === TOGGLE_CODE) {
         e.preventDefault();
         this.el.style.display = this.el.style.display === 'none' ? 'block' : 'none';
       }
