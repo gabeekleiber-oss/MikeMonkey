@@ -5,6 +5,7 @@
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import { BUDGETS } from '../src/engine/budgets.js';
 
 const PORT = 4173;
 const BASE_URL = `http://localhost:${PORT}/`;
@@ -47,6 +48,12 @@ try {
   });
   const frames = await page.evaluate(() => window.__mm.frames);
   console.log(`rendered ${frames} frames`);
+  // Frame time under software rendering is meaningless, so it is only logged.
+  // Draw calls and triangles do not depend on hardware, so they are enforced.
+  const stats = await page.evaluate(() => window.__mm.stats());
+  console.log('stats', JSON.stringify(stats));
+  if (stats.drawCalls > BUDGETS.drawCalls) problems.push(`draw calls ${stats.drawCalls} > ${BUDGETS.drawCalls}`);
+  if (stats.triangles > BUDGETS.triangles) problems.push(`triangles ${stats.triangles} > ${BUDGETS.triangles}`);
 } catch (e) {
   problems.push(`smoke test failed: ${e.message}`);
 } finally {

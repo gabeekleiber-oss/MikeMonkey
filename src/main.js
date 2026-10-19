@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { Perf } from './engine/perf.js';
 
 // Milestone 0 placeholder: a blank scene proving the toolchain works.
 // The real engine (player, terrain, chunks) lands in later issues.
@@ -45,11 +46,14 @@ window.addEventListener('resize', () => {
 });
 
 // Test hook: the headless smoke test (scripts/smoke.mjs) waits on this counter.
-window.__mm = { frames: 0 };
+const perf = new Perf(renderer);
+window.__mm = { frames: 0, stats: () => perf.snapshot() };
 
 const clock = new THREE.Clock();
 renderer.setAnimationLoop(() => {
+  perf.tick();
   cube.rotation.y += clock.getDelta() * 0.8;
   renderer.render(scene, camera);
+  perf.sampleRenderer();
   window.__mm.frames++;
 });

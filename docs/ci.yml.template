@@ -19,6 +19,8 @@ jobs:
         run: bash scripts/check-secrets.sh
       - name: Lint
         run: npm run lint
+      - name: Unit tests
+        run: npm test
       - name: Build
         run: npm run build
       - name: Install Chromium
