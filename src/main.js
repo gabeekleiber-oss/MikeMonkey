@@ -44,8 +44,12 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+// Test hook: the headless smoke test (scripts/smoke.mjs) waits on this counter.
+window.__mm = { frames: 0 };
+
 const clock = new THREE.Clock();
 renderer.setAnimationLoop(() => {
   cube.rotation.y += clock.getDelta() * 0.8;
   renderer.render(scene, camera);
+  window.__mm.frames++;
 });
